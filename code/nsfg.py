@@ -12,8 +12,8 @@ import thinkstats2
 from collections import defaultdict
 
 
-def ReadFemResp(dct_file='2002FemResp.dct',
-                dat_file='2002FemResp.dat.gz',
+def ReadFemResp(dct_file='code/2002FemResp.dct',
+                dat_file='code/2002FemResp.dat.gz',
                 nrows=None):
     """Reads the NSFG respondent data.
 
@@ -36,8 +36,8 @@ def CleanFemResp(df):
     pass
 
 
-def ReadFemPreg(dct_file='2002FemPreg.dct',
-                dat_file='2002FemPreg.dat.gz'):
+def ReadFemPreg(dct_file='code/2002FemPreg.dct',
+                dat_file='code/2002FemPreg.dat.gz'):
     """Reads the NSFG pregnancy data.
 
     dct_file: string file name
@@ -161,3 +161,63 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+# Page 11: 1-2 (Create a file named chap01ex.py and write code that reads the respondent file, 2002FemResp.dat.gz. You might want to start with a copy of nsfg.py and modify it…)
+
+#Select the birthord column, print the value counts, and compare to results published in the codebook
+
+preg = ReadFemPreg()
+print(preg.birthord.value_counts())
+
+#We can also use isnull to count the number of nans.
+
+print(preg.birthord.isnull().sum())
+
+
+#Select the prglngth column, print the value counts, and compare to results published in the codebook
+
+print(preg.prglngth.value_counts().sort_index())
+
+#To compute the mean of a column, you can invoke the mean method on a Series. For example, here is the mean birthweight in pounds:
+
+print(preg.totalwgt_lb.mean())
+
+#Create a new column named totalwgt_kg that contains birth weight in kilograms. Compute its mean. Remember that when you create a new column, you have to use dictionary syntax, not dot notation
+
+preg['totalwgt_kg'] = preg.totalwgt_lb /2.2
+print(preg.totalwgt_kg.mean())
+
+
+#nsfg.py also provides ReadFemResp, which reads the female respondents file and returns a DataFrame:
+
+resp = ReadFemResp()
+
+#DataFrame provides a method head that displays the first five rows:
+
+print(resp.head())
+
+#Select the age_r column from resp and print the value counts. How old are the youngest and oldest respondents?
+
+print(resp.age_r.value_counts().sort_index())
+
+#We can use the caseid to match up rows from resp and preg. For example, we can select the row from resp for caseid 2298 like this:
+
+print(resp[resp.caseid==2298])
+
+
+#And we can get the corresponding rows from preg like this:
+
+
+print(preg[preg.caseid==2298])
+
+#How old is the respondent with caseid 1?
+
+print(resp[resp.caseid==1].age_r)
+
+#What are the pregnancy lengths for the respondent with caseid 2298?
+
+print(preg[preg.caseid==2298].prglngth)
+
+#What was the birthweight of the first baby born to the respondent with caseid 5012?
+
+print(preg[preg.casid==5012].birthwgt_lb)

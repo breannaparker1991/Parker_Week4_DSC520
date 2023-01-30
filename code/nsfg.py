@@ -220,4 +220,4 @@ print(preg[preg.caseid==2298].prglngth)
 
 #What was the birthweight of the first baby born to the respondent with caseid 5012?
 
-print(preg[preg.casid==5012].birthwgt_lb)
+print(preg[preg.caseid==5012].birthwgt_lb)
